@@ -28,8 +28,10 @@ Route::fallback(ProductsCategoriesProxyController::class.'@index')
  * Store front home.
  */
 Route::get('/', [HomeController::class, 'index'])
-    ->name('shop.home.index')
-    ->middleware('cache.response');
+    ->name('shop.home.index');
+
+Route::get('/services/{slug}', [HomeController::class, 'servicesByCategory'])
+    ->name('shop.home.services');
 
 Route::get('about', [HomeController::class, 'about'])
     ->name('shop.home.about')
