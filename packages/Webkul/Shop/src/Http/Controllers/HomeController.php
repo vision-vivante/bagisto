@@ -32,8 +32,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
-        {
+    public function index(){
+
+    // Fetching all products for the our products section on homepage
+    $products = Product::all();
+    dd($products);
+
     // Get root category (parent_id = null in Bagisto usually)
     $rootCategory = Category::whereNull('parent_id')->first();
 
