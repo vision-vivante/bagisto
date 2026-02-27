@@ -9,6 +9,8 @@ use Webkul\Shop\Http\Controllers\ProductController;
 use Webkul\Shop\Http\Controllers\ProductsCategoriesProxyController;
 use Webkul\Shop\Http\Controllers\SearchController;
 use Webkul\Shop\Http\Controllers\SubscriptionController;
+use Webkul\Admin\Http\Controllers\Settings\LocaleController;
+use App\Http\Middleware\LocaleMiddleware;
 
 /**
  * CMS pages.
@@ -24,14 +26,16 @@ Route::fallback(ProductsCategoriesProxyController::class.'@index')
     ->name('shop.product_or_category.index')
     ->middleware('cache.response');
 
-/**
- * Store front home.
- */
+// Home page routes 
 Route::get('/', [HomeController::class, 'index'])
     ->name('shop.home.index');
 
 Route::get('/services/{slug}', [HomeController::class, 'servicesByCategory'])
     ->name('shop.home.services');
+
+Route::get('/switch/{ln}',[HomeController::class,'languageArabicSwitch'])->name('language.switch.arabic');
+
+Route::get('/Switch/{ln}',[HomeController::class,'languageEnglishSwitch'])->name('language.switch.english');
 
 Route::get('about', [HomeController::class, 'about'])
     ->name('shop.home.about')

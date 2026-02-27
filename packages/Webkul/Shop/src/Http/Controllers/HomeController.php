@@ -1,6 +1,8 @@
 <?php
 
 namespace Webkul\Shop\Http\Controllers;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
 
 use Illuminate\Support\Facades\Mail;
 use Webkul\Category\Repositories\CategoryRepository;
@@ -11,6 +13,7 @@ use Webkul\Theme\Repositories\ThemeCustomizationRepository;
 use Webkul\Category\Models\CategoryTranslation;
 use Webkul\Category\Models\Category;
 use Illuminate\Http\Request;
+use Webkul\Core\Repositories\ChannelRepository;
 
 
 class HomeController extends Controller
@@ -35,8 +38,8 @@ class HomeController extends Controller
     public function index(){
 
     // Fetching all products for the our products section on homepage
-    $products = Product::all();
-    dd($products);
+    // $products = Product::all();
+    // dd($products);
 
     // Get root category (parent_id = null in Bagisto usually)
     $rootCategory = Category::whereNull('parent_id')->first();
@@ -160,4 +163,29 @@ public function servicesByCategory(Request $req)
 
         return back();
     }
+
+    public function languageArabicSwitch($locale){ 
+       $channelRepo = app(ChannelRepository::class);
+       $channel = core()->getCurrentChannel();
+     $availableLocales = core()->getCurrentChannel()->locales->pluck('code')->toArray();
+    if (in_array($locale, $availableLocales)) {
+        app()->setLocale($locale);
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+    }
+
+
+    public function languageEnglishSwitch($locale){ 
+       $channelRepo = app(ChannelRepository::class);
+       $channel = core()->getCurrentChannel();
+     $availableLocales = core()->getCurrentChannel()->locales->pluck('code')->toArray();
+    if (in_array($locale, $availableLocales)) {
+        app()->setLocale($locale);
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+    }
+
+    
 }
