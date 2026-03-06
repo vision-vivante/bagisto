@@ -15,14 +15,16 @@ use App\Http\Middleware\LocaleMiddleware;
 
 // Homepage Routes 
 
-// Header language switcher (Arabic)
-Route::get('/switch/{ln}',[HomeController::class,'languageArabicSwitch'])->name('language.switch.arabic');
-
-// Header language switcher (English)
-Route::get('/Switch/{ln}',[HomeController::class,'languageEnglishSwitch'])->name('language.switch.english');
+// Language Switch
+Route::get('/switch/lang/{ln}',[HomeController::class,'switchLanguage'])->name('switch.language');
 
 // Header search box
-Route::get('/booking/search', [SearchController::class, 'bookingSearch'])->name('booking.search');   
+Route::get('search', [SearchController::class, 'index'])->name('shop.search.index');
+
+// Search box
+Route::get('/booking/search', [SearchController::class, 'serviceSearchResult'])->name('booking.search');   
+
+
 
 // Index page 
 Route::get('/', [HomeController::class, 'index'])
@@ -37,9 +39,8 @@ Route::get('/service/{id}', [HomeController::class, 'servicesDetails'])
     ->name('shop.home.service.details');
 
 // Product details page
-Route::get('/product/{id}', [HomeController::class, 'productDetails'])
+Route::get('/product/{url_key}', [HomeController::class, 'productDetails'])
     ->name('shop.home.product.details');
-
 
 // Inner pages
 // Services page
@@ -52,25 +53,14 @@ Route::get('/gallery', [HomeController::class, 'galleryIndex'])
 
 // About Us page
 Route::get('about', [HomeController::class, 'about'])
-    ->name('shop.home.about');
+    ->name('shop.home.aboutus');
 
 // Contact Us page
 Route::get('contact', [HomeController::class, 'contactUs'])
-    ->name('shop.home.contact');
+    ->name('shop.home.contactus');
 
 Route::post('contact-us/send-mail', [HomeController::class, 'sendContactUsMail'])
-    ->name('shop.home.contact_us.send_mail')
-    ->middleware('cache.response');
-
-
-
-
-/**
- * Store front search.
- */
-Route::get('search', [SearchController::class, 'index'])
-    ->name('shop.search.index')
-    ->middleware('cache.response');
+    ->name('shop.home.contact_us.send_mail');
 
 Route::post('search/upload', [SearchController::class, 'upload'])->name('shop.search.upload');
 
