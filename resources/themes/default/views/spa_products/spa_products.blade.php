@@ -6,7 +6,7 @@
 
   @forelse($spa_products as $spa_product)
 
-  <a href="{{ route('shop.home.product.details',$spa_product->url_key) }}"
+  <a href="{{ route('shop.product_or_category.index',$spa_product->url_key) }}"
      class="flex flex-col items-center cursor-pointer">
 
       <!-- Image -->

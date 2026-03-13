@@ -82,6 +82,7 @@ class HomeController extends Controller
     ->where('channel', core()->getCurrentChannel()->code) // current channel
     ->get();
 
+
         $service_locations = BookingProduct::pluck('location');
 
         return view('shop::home.index', compact(
@@ -449,6 +450,5 @@ class HomeController extends Controller
         }
 
     }
-
 
 }

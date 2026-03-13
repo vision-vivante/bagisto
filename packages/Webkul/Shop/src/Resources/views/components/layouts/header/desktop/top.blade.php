@@ -1,5 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    @stack('meta')
+</head>
+
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+
+{{-- Login Success Message  --}}
+@if(session('success'))
+<div id="flash-success"
+     class="fixed top-6 right-6 z-50 flex items-center gap-3 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg">
+
+    <span>{{ session('success') }}</span>
+
+    <button onclick="closeSuccess()" class="text-white text-lg font-bold ml-2">
+        ×
+    </button>
+</div>
+@endif
+
+{{-- Logout Success Message  --}}
+@if(session('logout-success'))
+<div id="flash-logout"
+     class="fixed top-6 right-6 z-50 flex items-center gap-3 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg">
+
+    <span>{{ session('logout-success') }}</span>
+
+    <button onclick="closeLogout()" class="text-white text-lg font-bold ml-2">
+        ×
+    </button>
+</div>
+@endif
+
+
+
+@if(session('logout-success'))
+<div id="flash-logout"
+     class="fixed top-20 right-6 z-50 flex items-center gap-3 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg">
+
+    <span>{{ session('logout-success') }}</span>
+
+    <button onclick="closeFlash('flash-logout')" class="text-white text-lg font-bold ml-2">
+        ×
+    </button>
+</div>
+@endif
 
 @php
     $channel = core()->getCurrentChannel();
@@ -94,8 +144,12 @@
                     </a>
                 </div>
 
-                {{-- SEARCH BOX --}}
-                <div class="relative flex-1 md:flex-none w-full md:w-[380px] mt-2 md:mt-0">
+                {{-- @if(Route::currentRouteName() == 'shop.home.index' || Route::currentRouteName() == 'sbt.perfume.index' || Route::currentRouteName() == 'sbt.perfumes.search' || Route::currentRouteName() == 'spa.product.index' || Route::currentRouteName() == 'spa.product.search'
+                 || Route::currentRouteName() == 'flower.product.index' || Route::currentRouteName() == 'flower.product.search')
+                
+                @else
+                   {{-- SEARCH BOX --}}
+                {{-- <div class="relative flex-1 md:flex-none w-full md:w-[380px] mt-2 md:mt-0">
                     <form action="{{ route('shop.search.index') }}" method="get">
                         <input 
                             type="text" 
@@ -109,8 +163,10 @@
                             </svg>
                         </button>
                     </form>
-                </div>
-
+                </div> --}}
+                {{-- @endif --}}
+                
+                
             </div>
 
             {{-- RIGHT SECTION --}}
@@ -134,21 +190,58 @@
 
                 {{-- CART --}}
                 <div class="relative cursor-pointer">
+                    <a href="{{ route('shop.cart.index') }}">
                     <img src="{{ asset('images/cart.png') }}" alt="Cart" class="w-6 h-6">
+                    </a>
                 </div>
 
                 {{-- WISHLIST --}}
                 <div class="relative cursor-pointer">
                     <img src="{{ asset('images/wishlist.png') }}" alt="Wishlist" class="w-6 h-6">
                 </div>
-             
-                {{-- ACCOUNT --}}
-                <div class="relative cursor-pointer">
-                    <a href="{{ route('shop.customer.session.create') }}">
-                    <img src="{{ asset('images/account.png') }}" alt="Account" class="w-6 h-6">
-                    </a>
-                </div>
 
+               {{-- ACCOUNT --}}
+                <div class="relative cursor-pointer">
+
+            @auth('customer')
+            <!-- Account Icon -->
+            <img 
+            src="{{ asset('images/account_open.png') }}" 
+            alt="Account"
+            class="w-6 h-6"
+            onclick="toggleAccountDropdown()"
+            >
+
+        <!-- Dropdown -->
+        <div 
+            id="accountDropdown"
+            class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+        >
+            <a href="{{ route('customer.profile.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                Profile
+            </a>
+
+            <a href="#" class="block px-4 py-2 hover:bg-gray-100">
+                Orders
+            </a>
+
+            <form method="POST" action="{{ route('shop.customer.session.destroy') }}">
+    @csrf
+    @method('DELETE')
+
+    <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-100">
+        Logout
+      </button>
+    </form>
+        </div>
+
+    @else
+        <a href="{{ route('shop.customer.session.index') }}">
+            <img src="{{ asset('images/account.png') }}" alt="Account" class="w-6 h-6">
+        </a>
+    @endauth
+
+</div>
             </div>
 
         </div>
@@ -201,4 +294,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+function toggleAccountDropdown() {
+    const dropdown = document.getElementById('accountDropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+
+
+// SUCCESS MESSAGE
+function closeSuccess() {
+    const msg = document.getElementById('flash-success');
+    if (msg) msg.style.display = 'none';
+}
+
+setTimeout(function () {
+    const msg = document.getElementById('flash-success');
+    if (msg) msg.style.display = 'none';
+}, 4000);
+
+
+// LOGOUT MESSAGE
+function closeLogout() {
+    const msg = document.getElementById('flash-logout');
+    if (msg) msg.style.display = 'none';
+}
+
+setTimeout(function () {
+    const msg = document.getElementById('flash-logout');
+    if (msg) msg.style.display = 'none';
+}, 4000);
+
+
 </script>
