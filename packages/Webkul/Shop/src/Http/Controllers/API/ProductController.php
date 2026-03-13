@@ -18,7 +18,8 @@ class ProductController extends APIController
     public function __construct(
         protected CategoryRepository $categoryRepository,
         protected ProductRepository $productRepository
-    ) {}
+    ) {
+    }
 
     /**
      * Product listings.
@@ -58,7 +59,6 @@ class ProductController extends APIController
                 ]);
             }
         }
-
         return ProductResource::collection($products);
     }
 

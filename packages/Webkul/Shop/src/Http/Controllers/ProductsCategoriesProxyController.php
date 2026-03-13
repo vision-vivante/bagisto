@@ -15,7 +15,7 @@ class ProductsCategoriesProxyController extends Controller
      *
      * @var int Status
      */
-    const STATUS = 1;
+    public const STATUS = 1;
 
     /**
      * Create a new controller instance.
@@ -27,7 +27,8 @@ class ProductsCategoriesProxyController extends Controller
         protected ProductRepository $productRepository,
         protected ThemeCustomizationRepository $themeCustomizationRepository,
         protected URLRewriteRepository $urlRewriteRepository
-    ) {}
+    ) {
+    }
 
     /**
      * Show product or category view. If neither category nor product matches, abort with code 404.
@@ -37,7 +38,6 @@ class ProductsCategoriesProxyController extends Controller
     public function index(Request $request)
     {
         $slugOrURLKey = urldecode(trim($request->getPathInfo(), '/'));
-
         /**
          * Support url for chinese, japanese, arabic and english with numbers.
          */
@@ -84,7 +84,10 @@ class ProductsCategoriesProxyController extends Controller
                 abort(404);
             }
 
+
             visitor()->visit($product);
+
+            // dd($product);
 
             return view('shop::products.view', compact('product'));
         }
